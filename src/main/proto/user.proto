@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpcsample.proto";
+option java_outer_classname = "UserProto";
+
+package user;
+
+message UserRecord {
+  string id      = 1;
+  string name    = 2;
+  string profile = 3;
+}
+
+message GetUsersRequest {}
+
+message GetUsersResponse {
+  repeated UserRecord users = 1;
+}
+
+service UserService {
+  rpc GetUsers (GetUsersRequest) returns (GetUsersResponse);
+}

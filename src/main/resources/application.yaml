@@ -1,14 +1,19 @@
 spring:
   application:
     name: springboot-grpc-sample
+  grpc:
+    server:
+      port: 9090
+      reflection:
+        enabled: true
+      max-inbound-message-size: 524288000
+    client:
+      channels:
+        local-grpc:
+          address: static://localhost:9090
+          max-inbound-message-size: 16777216
 
-grpc:
-  server:
-    port: 9090
-    reflection:
-      enabled: true
-
-  client:
-    channels:
-      local:
-        address: static://localhost:9090
+server:
+  port: 8080
+  compression:
+    enabled: false

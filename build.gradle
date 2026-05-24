@@ -21,14 +21,22 @@ repositories {
 
 ext {
     set('springGrpcVersion', "1.0.3")
+    set('protobufVersion', "4.31.1")
+    set('grpcVersion', "1.72.0")
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-restclient'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+    // gRPC dependencies
     implementation 'io.grpc:grpc-services'
     implementation 'org.springframework.grpc:spring-grpc-client-spring-boot-starter'
     implementation 'org.springframework.grpc:spring-grpc-server-web-spring-boot-starter'
+
+    implementation 'io.grpc:grpc-protobuf'
+    implementation 'io.grpc:grpc-stub'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
@@ -47,11 +55,11 @@ dependencyManagement {
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc'
+        artifact = 'com.google.protobuf:protoc:${protobufVersion}'
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java'
+            artifact = 'io.grpc:protoc-gen-grpc-java:${grpcVersion}'
         }
     }
     generateProtoTasks {

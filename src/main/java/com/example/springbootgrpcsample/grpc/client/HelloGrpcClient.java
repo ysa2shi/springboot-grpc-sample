@@ -6,33 +6,42 @@ import com.example.grpcsample.proto.HelloServiceGrpc;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.grpc.client.GrpcChannelFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class HelloGrpcClient {
 
-    private final GrpcChannelFactory channelFactory;
+    private final HelloServiceGrpc.HelloServiceBlockingStub stub;
 
     public String callHello(String name) {
-
-        HelloServiceGrpc.HelloServiceBlockingStub stub =
-                HelloServiceGrpc.newBlockingStub(
-                        channelFactory.createChannel("local")
-                );
 
         HelloRequest request = HelloRequest.newBuilder()
                 .setName(name)
                 .build();
 
         try {
-            HelloResponse response = stub.sayHello(request);
+            HelloResponse response = stub
+                    .withDeadlineAfter(3, TimeUnit.SECONDS)
+                    .sayHello(request);
+
             return response.getMessage();
         } catch (StatusRuntimeException ex) {
-            log.error("gRPC call failed. status={}", ex.getStatus(), ex);
-            throw ex;
+            log.error("gRPC call failed. code={}, description={}",
+                    ex.getStatus().getCode(),
+                    ex.getStatus().getDescription(),
+                    ex);
+            switch (ex.getStatus().getCode()) {
+                case DEADLINE_EXCEEDED ->
+                        throw new RuntimeException("gRPC timeout", ex);
+                case UNAVAILABLE ->
+                        throw new RuntimeException("gRPC unavailable", ex);
+                default ->
+                        throw new RuntimeException("gRPC error", ex);
+            }
         }
     }
 }

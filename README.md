@@ -1,7 +1,7 @@
 # gRPC PoC — REST JSON / REST GZIP / gRPC 比較検証
 
 同一 Spring Boot プロセス内で **REST JSON・REST GZIP・gRPC** の 3 方式を実装し、  
-User データ（1000 件 × 5000 文字 profile）を題材にペイロードサイズ・レスポンス時間を比較する PoC。
+User データ（10 件 × 500 文字 profile）を題材にペイロードサイズ・レスポンス時間を比較する PoC。
 
 ---
 
@@ -62,7 +62,7 @@ src/
 │   │   │   ├── HelloController.java      GET /hello → gRPC 呼び出し
 │   │   │   └── UserController.java       GET /rest/users, GET /grpc/users
 │   │   ├── service/
-│   │   │   └── UserDataService.java      ★ ダミーユーザーデータ生成
+│   │   │   └── UserDataService.java      ★ ダミーユーザーデータ生成（10件 × 500文字 profile）
 │   │   ├── dto/
 │   │   │   └── UserResponse.java         record { id, name, profile }
 │   │   └── grpc/

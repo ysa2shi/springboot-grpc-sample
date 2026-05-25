@@ -112,10 +112,10 @@ curl -w "\nTime: %{time_total}s, Size: %{size_download} bytes\n" \
 # 別ターミナルで gzip プロファイルを指定して起動
 ./gradlew bootRun --args='--spring.profiles.active=gzip'
 
-# REST GZIP（圧縮あり, port 8080）
+# REST GZIP（圧縮あり, port 8081）
 curl -H "Accept-Encoding: gzip" \
      -w "\nTime: %{time_total}s, Size: %{size_download} bytes\n" \
-     http://localhost:8080/rest/users -o /dev/null
+     http://localhost:8081/rest/users -o /dev/null
 ```
 
 ### 4. grpcurl で gRPC サーバーを直接叩く
